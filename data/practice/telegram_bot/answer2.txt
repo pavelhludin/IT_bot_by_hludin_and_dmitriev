@@ -1,0 +1,15 @@
+@dp.message(Command("help"))
+async def cmd_help(message: Message):
+    help_text = """
+    Доступные команды:
+    /start - Начать работу с ботом
+    /help - Получить список команд
+    /time - Узнать текущее время
+    /random - Получить случайное число
+    /weather - Узнать погоду
+    /joke - Получить шутку
+    /calc - Вычислить математическое выражение
+    /remind - Установить напоминание
+    /quiz - Пройти викторину
+    """
+    await message.answer(help_text)

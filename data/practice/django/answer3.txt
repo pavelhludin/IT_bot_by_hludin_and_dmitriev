@@ -1,0 +1,32 @@
+1.В файле myapp/views.py создайте view для отображения списка постов:
+
+```
+from django.shortcuts import render
+from .models import Post
+
+def post_list(request):
+    posts = Post.objects.all()
+    return render(request, 'myapp/post_list.html', {'posts': posts})
+```
+
+2.В файле myapp/urls.py добавьте маршрут:
+
+```
+from django.urls import path
+from .views import post_list
+
+urlpatterns = [
+    path('posts/', post_list, name='post_list'),
+]
+```
+
+3.Создайте шаблон myapp/templates/myapp/post_list.html:
+
+```
+<h1>Список постов</h1>
+<ul>
+    {% for post in posts %}
+        <li>{{ post.title }}</li>
+    {% endfor %}
+</ul>
+```

@@ -1,0 +1,11 @@
+@dp.message(Command("calc"))
+async def cmd_calc(message: Message):
+    await message.answer("Введите математическое выражение (например, 2 + 2):")
+
+@dp.message(lambda message: any(op in message.text for op in ["+", "-", "*", "/"]))
+async def process_calc(message: Message):
+    try:
+        result = eval(message.text)
+        await message.answer(f"Результат: {result}")
+    except Exception as e:
+        await message.answer(f"Ошибка: {e}")

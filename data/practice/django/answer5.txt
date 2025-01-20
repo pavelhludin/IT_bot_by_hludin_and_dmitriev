@@ -1,0 +1,41 @@
+1.В файле myapp/views.py добавьте view для редактирования и удаления:
+
+```
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Post
+from .forms import PostForm
+
+def edit_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'myapp/edit_post.html', {'form': form})
+
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('post_list')
+```
+
+2.В файле myapp/urls.py добавьте маршруты:
+
+```
+path('posts/<int:pk>/edit/', edit_post, name='edit_post'),
+path('posts/<int:pk>/delete/', delete_post, name='delete_post'),
+```
+
+3.Создайте шаблон myapp/templates/myapp/edit_post.html:
+
+```
+<h1>Редактировать пост</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+```

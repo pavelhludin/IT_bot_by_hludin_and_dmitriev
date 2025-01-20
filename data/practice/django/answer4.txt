@@ -1,0 +1,45 @@
+1.В файле myapp/forms.py создайте форму:
+
+```
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']
+```
+
+2.В файле myapp/views.py добавьте view для создания поста:
+
+```
+from django.shortcuts import render, redirect
+from .forms import PostForm
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request, 'myapp/create_post.html', {'form': form})
+```
+
+3.В файле myapp/urls.py добавьте маршрут:
+
+```
+path('posts/create/', create_post, name='create_post'),
+```
+
+4.Создайте шаблон myapp/templates/myapp/create_post.html:
+
+```
+<h1>Создать новый пост</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+```

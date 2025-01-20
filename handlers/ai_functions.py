@@ -5,6 +5,8 @@ from aiogram.fsm.state import State, StatesGroup
 import logging
 import requests
 from config import GIGACHAT_API_KEY
+import uuid
+from urllib.parse import urlencode
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -22,15 +24,18 @@ def get_access_token():
     try:
         headers = {
             "Authorization": f"Bearer {GIGACHAT_API_KEY}",
-            "RqUID": "7dc8cc07-7054-4cb2-96d5-9271bb95adcd",
+            "RqUID": "c388d106-34d3-456d-9a0b-01b2aa11b53a",  # Генерация уникального RqUID
             "Content-Type": "application/x-www-form-urlencoded"
         }
         data = {
             "scope": "GIGACHAT_API_PERS"
         }
-        response = requests.post(AUTH_URL, headers=headers, data=data, verify=False)
+        response = requests.post(AUTH_URL, headers=headers, data=urlencode(data), verify=False)
         response.raise_for_status()
         return response.json().get("access_token")
+    except requests.exceptions.HTTPError as e:
+        logger.error(f"HTTP Error: {e.response.status_code} - {e.response.text}")
+        raise Exception(f"Ошибка аутентификации: {str(e)}")
     except Exception as e:
         logger.error(f"Ошибка при получении токена: {str(e)}")
         raise Exception(f"Ошибка аутентификации: {str(e)}")

@@ -1,0 +1,6 @@
+import random
+
+@dp.message(Command("random"))
+async def cmd_random(message: Message):
+    random_number = random.randint(1, 100)
+    await message.answer(f"Случайное число: {random_number}")

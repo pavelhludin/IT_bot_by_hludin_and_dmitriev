@@ -1,0 +1,59 @@
+
+1. Установите Django:
+
+```pip install django```
+
+
+2.Создайте новый проект:
+
+```
+django-admin startproject myproject
+cd myproject
+```
+
+3.Создайте новое приложение:
+
+```
+python manage.py startapp myapp
+```
+
+4.В файле myapp/views.py создайте view:
+
+```
+from django.http import HttpResponse
+
+def hello(request):
+    return HttpResponse("Hello, Django!")
+
+```
+
+5.В файле myapp/urls.py создайте маршрут:
+
+```
+from django.urls import path
+from .views import hello
+
+urlpatterns = [
+    path('', hello, name='hello'),
+]
+```
+
+6.В файле myproject/urls.py подключите маршруты приложения:
+
+```
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('myapp.urls')),
+]
+```
+
+7.Запустите сервер:
+
+```
+python manage.py runserver
+```
+
+8.Перейдите по адресу http://127.0.0.1:8000/, чтобы увидеть "Hello, Django!".

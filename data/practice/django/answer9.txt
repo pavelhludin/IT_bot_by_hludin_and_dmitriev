@@ -1,0 +1,63 @@
+1.В файле myapp/models.py создайте модель Comment:
+
+```
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.CharField(max_length=100)
+    text = models.TextField()
+
+    def __str__(self):
+        return f"Комментарий от {self.author}"
+```
+
+2.Создайте и примените миграции:
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+3.В файле myapp/forms.py создайте форму для комментариев:
+
+```
+from .models import Comment
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['author', 'text']
+```
+
+4.В файле myapp/views.py добавьте view для добавления комментариев:
+
+```
+def add_comment(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = CommentForm()
+    return render(request, 'myapp/add_comment.html', {'form': form})
+```
+
+5.В файле myapp/urls.py добавьте маршрут:
+
+```
+path('posts/<int:pk>/comment/', add_comment, name='add_comment'),
+```
+
+6.Создайте шаблон myapp/templates/myapp/add_comment.html:
+
+```
+<h1>Добавить комментарий</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+```

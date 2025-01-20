@@ -1,0 +1,3 @@
+@dp.message()
+async def echo(message: Message):
+    await message.answer(f"Вы сказали: {message.text}")

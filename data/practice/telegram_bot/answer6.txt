@@ -1,0 +1,13 @@
+@dp.message(Command("weather"))
+async def cmd_weather(message: Message):
+    await message.answer("Введите город:")
+
+@dp.message(lambda message: message.text and message.text.lower() in ["москва", "санкт-петербург", "новосибирск"])
+async def process_weather(message: Message):
+    city = message.text
+    weather_data = {
+        "москва": "Солнечно, +20°C",
+        "санкт-петербург": "Дождь, +15°C",
+        "новосибирск": "Облачно, +10°C",
+    }
+    await message.answer(f"Погода в {city}: {weather_data.get(city.lower(), 'Данные недоступны')}")

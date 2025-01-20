@@ -1,0 +1,7 @@
+# Программа, которая генерирует список из 10 случайных чисел и находит их среднее значение
+import random
+
+numbers = [random.randint(1, 100) for _ in range(10)]
+average = sum(numbers) / len(numbers)
+print(f"Сгенерированные числа: {numbers}")
+print(f"Среднее значение: {average}")

@@ -1,0 +1,64 @@
+1.В файле myproject/settings.py добавьте настройки для аутентификации:
+
+```
+LOGIN_URL = 'login'
+```
+
+2.В файле myapp/views.py добавьте декораторы для ограничения доступа:
+
+```
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def create_post(request):
+    # Логика создания поста
+
+@login_required
+def edit_post(request, pk):
+    # Логика редактирования поста
+
+@login_required
+def delete_post(request, pk):
+    # Логика удаления поста
+```
+
+3.Создайте view для входа и выхода:
+
+```
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('post_list')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'myapp/login.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('post_list')
+```
+
+4.В файле myapp/urls.py добавьте маршруты для входа и выхода:
+
+```
+path('login/', login_view, name='login'),
+path('logout/', logout_view, name='logout'),
+```
+
+5.Создайте шаблон myapp/templates/myapp/login.html:
+
+```
+<h1>Вход</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+</form>
+```

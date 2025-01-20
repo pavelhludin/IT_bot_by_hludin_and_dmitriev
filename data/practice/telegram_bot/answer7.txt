@@ -1,0 +1,10 @@
+jokes = [
+    "Почему программисты не любят природу? В ней слишком много багов.",
+    "Какой язык программирования самый романтичный? Python, потому что он всегда говорит 'I love you'.",
+    "Почему программисты путают Хэллоуин и Рождество? Потому что Oct 31 == Dec 25.",
+]
+
+@dp.message(Command("joke"))
+async def cmd_joke(message: Message):
+    joke = random.choice(jokes)
+    await message.answer(joke)

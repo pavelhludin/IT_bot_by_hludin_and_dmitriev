@@ -1,0 +1,6 @@
+from datetime import datetime
+
+@dp.message(Command("time"))
+async def cmd_time(message: Message):
+    current_time = datetime.now().strftime("%H:%M:%S")
+    await message.answer(f"Текущее время: {current_time}")

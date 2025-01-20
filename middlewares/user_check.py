@@ -17,7 +17,12 @@ class UserCheckMiddleware(BaseMiddleware):
         state: FSMContext = data.get("state")
 
         # Если пользователь находится в процессе регистрации, пропускаем проверку
-        if await state.get_state() in [RegistrationStates.waiting_for_name, RegistrationStates.waiting_for_email]:
+        current_state = await state.get_state()
+        if current_state in [
+            RegistrationStates.waiting_for_name_choice,
+            RegistrationStates.waiting_for_name,
+            RegistrationStates.waiting_for_email
+        ]:
             return await handler(event, data)
 
         # Пропускаем команду /start

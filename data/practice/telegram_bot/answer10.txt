@@ -1,0 +1,14 @@
+quiz_data = {
+    "Сколько будет 2 + 2?": "4",
+    "Столица Франции?": "Париж",
+    "Какой язык программирования мы используем?": "Python",
+}
+
+@dp.message(Command("quiz"))
+async def cmd_quiz(message: Message):
+    question = random.choice(list(quiz_data.keys()))
+    await message.answer(f"Вопрос: {question}")
+
+@dp.message(lambda message: message.text in quiz_data.values())
+async def process_quiz(message: Message):
+    await message.answer("Правильно!")

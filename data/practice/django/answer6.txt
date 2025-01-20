@@ -1,0 +1,20 @@
+1.В файле myapp/views.py добавьте view для деталей поста:
+
+```
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'myapp/post_detail.html', {'post': post})
+```
+
+2.В файле myapp/urls.py добавьте маршрут:
+
+```
+path('posts/<int:pk>/', post_detail, name='post_detail'),
+```
+
+3.Создайте шаблон myapp/templates/myapp/post_detail.html:
+
+```
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+```

@@ -1,0 +1,18 @@
+from aiogram import F
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
+@dp.message(Command("remind"))
+async def cmd_remind(message: Message):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Через 5 минут")],
+            [KeyboardButton(text="Через 10 минут")],
+        ],
+        resize_keyboard=True,
+    )
+    await message.answer("Выберите время напоминания:", reply_markup=keyboard)
+
+@dp.message(F.text.in_(["Через 5 минут", "Через 10 минут"]))
+async def process_remind(message: Message):
+    time = 5 if message.text == "Через 5 минут" else 10
+    await message.answer(f"Напоминание установлено на {time} минут.")

@@ -1,0 +1,26 @@
+1.В файле myapp/views.py добавьте view для поиска:
+
+```
+def search_posts(request):
+    query = request.GET.get('q')
+    if query:
+        posts = Post.objects.filter(title__icontains=query)
+    else:
+        posts = Post.objects.all()
+    return render(request, 'myapp/post_list.html', {'posts': posts})
+```
+
+2.В файле myapp/urls.py добавьте маршрут:
+
+```
+path('posts/search/', search_posts, name='search_posts'),
+```
+
+3.В шаблоне myapp/templates/myapp/post_list.html добавьте форму поиска:
+
+```
+<form method="get" action="{% url 'search_posts' %}">
+    <input type="text" name="q" placeholder="Поиск по заголовку">
+    <button type="submit">Искать</button>
+</form>
+```
