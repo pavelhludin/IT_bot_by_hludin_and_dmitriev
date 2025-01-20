@@ -1,6 +1,7 @@
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
+from aiogram.types import BotCommand  # Импортируем BotCommand
 from config import BOT_TOKEN
 
 bot = Bot(
@@ -28,6 +29,19 @@ dp.include_router(shrek_router)
 dp.message.middleware(user_check.UserCheckMiddleware())
 dp.message.middleware(logging.LoggingMiddleware())
 
+# Функция для регистрации команд
+async def set_commands(bot: Bot):
+    commands = [
+        BotCommand(command="/start", description="Начать работу с ботом"),
+        BotCommand(command="/menu", description="Открыть главное меню"),
+    ]
+    await bot.set_my_commands(commands)
+
 # Запуск бота
+async def main():
+    await set_commands(bot)  # Регистрируем команды перед запуском бота
+    await dp.start_polling(bot, skip_updates=True)
+
 if __name__ == "__main__":
-    dp.run_polling(bot, skip_updates=True)
+    import asyncio
+    asyncio.run(main())  # Запускаем бота
